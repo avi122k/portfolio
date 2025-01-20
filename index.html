@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Store</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Basic styling for the website */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5; /* Light background for contrast */
+        }
+
+        header {
+            background: linear-gradient(135deg, #333, #555); /* Gradient background */
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+        }
+
+        header nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        header nav ul li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        header nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s; /* Smooth color transition */
+        }
+
+        header nav ul li a:hover {
+            color: #a5f12a; /* Change color on hover */
+        }
+
+        .hero {
+            background: linear-gradient(to bottom right, rgb(227, 171, 171), rgb(255, 255, 255));
+            text-align: center;
+            padding: 50px 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-list {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .book {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 200px;
+        }
+
+        .book img {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .book button {
+            padding: 10px;
+            background-color: #a5f12a;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .book button:hover {
+            background-color: #8cc020;
+        }
+
+        #cart {
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        #checkout-btn {
+            padding: 10px 20px;
+            background-color: #a5f12a;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #checkout-btn:hover {
+            background-color: #8cc020;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">Book Store</div>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#shop">Shop</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#cart">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <h1>Welcome to</h1>
+        <h2>Avinash's Book Store</h2>
+        <div class="logo">Browse below</div>
+    </section>
+
+    <section id="featured">
+        <h2>Featured Books</h2>
+        <div class="book-list">
+            <div class="book">
+                <img src="https://m.media-amazon.com/images/I/71NDa85qT7L.SY466.jpg" alt="Book 1">
+                <h3>Shivaji</h3>
+                <p>by Ranjit Desai</p>
+                <p>₹899</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="book">
+                <img src="https://m.media-amazon.com/images/I/41-elkwMTbL.SY445_SX342.jpg" alt="Book 2">
+                <h3>Fear Not Be Strong</h3>
+                <p>by Swami Tathagatananda</p>
+                <p>₹30</p>
+                <button>Add to Cart</button>
+            </div>
+            <div class="book">
+                <img src="https://m.media-amazon.com/images/I/41RVqoveEpL.SY445_SX342.jpg" alt="Book 3">
+                <h3>Believe in Yourself</h3>
+                <p>by Dr. Joseph Murphy</p>
+                <p>₹150</p>
+                <button>Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>About Us</h2>
+        <p>Welcome to Avinash's Book Store, where we offer a wide selection of books across various genres. Our mission is to promote reading and provide quality literature to our community.</p>
+    </section>
+
+    <section id="contact">
+        <h2>Contact Us</h2>
+        <p>If you have any questions, feel free to reach out to us!</p>
+    </section>
+
+    <section id="cart">
+        <h2>Your Cart </h2>
+        <div id="cart-items"></div>
+        <p id="total-price">Total: ₹0</p>
+        <button id="checkout-btn">Checkout</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Book Store. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let cart = [];
+        let total = 0;
+
+        // Function to add a book to the cart
+        function addToCart(title, price) {
+            cart.push({ title: title, price: price });
+            total += price;
+            updateCart();
+        }
+
+        // Function to update the cart display
+        function updateCart() {
+            const cartItems = document.getElementById('cart-items');
+            cartItems.innerHTML = ''; // Clear previous items
+
+            cart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('cart-item');
+                div.innerHTML = <span>${item.title}</span> - <span>₹${item.price}</span> <button onclick="removeFromCart(${index})">Remove</button>;
+                cartItems.appendChild(div);
+            });
+
+            // Update total price
+            document.getElementById('total-price').innerText = Total: ₹${total};
+        }
+
+        // Function to remove a book from the cart
+        function removeFromCart(index) {
+            total -= cart[index].price; // Deduct the price
+            cart.splice(index, 1); // Remove the item
+            updateCart();
+        }
+
+        // Add event listeners to "Add to Cart" buttons
+        document.querySelectorAll('.book button').forEach((btn) => {
+            btn.addEventListener('click', function() {
+                const bookTitle = this.parentElement.querySelector('h3').innerText;
+                const bookPrice = parseFloat(this.parentElement.querySelector('p:nth-of-type(2)').innerText.replace('₹', ''));
+                addToCart(bookTitle, bookPrice);
+            });
+        });
+
+        // Checkout button click handler
+        document.getElementById('checkout-btn').addEventListener('click', function() {
+            if (cart.length > 0) {
+                alert('Thank you for your purchase!');
+                cart = [];
+                total = 0;
+                updateCart();
+            } else {
+                alert('Your cart is empty!');
+            }
+        });
+    </script>
+</body>
+</html>
